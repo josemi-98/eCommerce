@@ -1,0 +1,36 @@
+.navbar-custom {
+    background-color: #000;
+  }
+  
+  .navbar-custom .navbar-brand img {
+    max-height: 40px;
+  }
+  
+  .navbar-custom .nav-link {
+    margin-right: 15px;
+    color: #fff !important;
+  }
+  
+  .navbar-custom .form-control {
+    flex: 1;
+    background-color: #222;
+    color: #fff;
+    border: none;
+  }
+  
+  .navbar-custom .form-control::placeholder {
+    color: #aaa;
+  }
+  
+  .navbar-custom .nav-link .svg-inline--fa {
+    margin-right: 5px;
+  }
+  
+  .navbar-custom .nav-link {
+    color: #fff;
+  }
+
+  .navbar-toggler-icon {
+    background-color: white;
+  }
+  
