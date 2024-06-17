@@ -54,3 +54,16 @@
   color: rgb(87, 87, 255);
   margin-top: 10px; 
 }
+.product-rating{
+  color: rgb(87, 87, 255);
+
+}
+
+button {
+  background-color: rgb(87, 87, 255);
+  color: white;
+  border-radius: 8px;
+  border: none;
+  padding: 10px;
+}
+

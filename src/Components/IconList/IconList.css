@@ -1,0 +1,14 @@
+.cart-icon-container {
+    position: relative;
+    display: inline-block;
+}
+.cart-count {
+    position: absolute;
+    top: -13px; /* Ajusta este valor para cambiar la posición vertical */
+    right: -20px; /* Ajusta este valor para cambiar la posición horizontal */
+    background-color: rgb(87, 87, 255);
+    color: white;
+    border-radius: 80%;
+    padding: 5px 10px; /* Ajusta este valor según sea necesario */
+    font-size: 12px; /* Ajusta este valor según sea necesario */
+}

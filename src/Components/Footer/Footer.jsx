@@ -1,10 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faPhone, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import './Footer.css';
+import { useContext } from 'react';
+import { ThemeContext } from '../Provider/ThemeProvider';
 
 const Footer = () => {
+    const {theme} = useContext(ThemeContext);
     return (
-        <footer className="footer">
+        <footer className={`footer ${theme}`}>
             <div className="footer__container">
                 <div className="footer__column">
                     <h3>Contacto</h3>

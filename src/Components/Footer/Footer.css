@@ -1,6 +1,6 @@
 .footer {
-    background-color: #000000;
-    color: #fff;
+    background-color: var(--container-background);
+    color: var(--text);
     padding: 20px;
 }
 
@@ -35,16 +35,28 @@
 }
 
 .footer__column a {
-    color: #fff;
+    color: var(--text);
     text-decoration: none;
 }
 
 .footer__line {
-    border: 1px solid #fff;
+    border: 1px solid var(--border);
     margin: 20px 0; 
 }
 
 .footer__copyright {
     text-align: center;
     margin-top: 10px;
+}
+
+.light {
+    --container-background: rgb(231, 231, 231);
+    --text: black;
+    --border: black;
+}
+
+.dark {
+    --container-background: rgb(0, 0, 0);
+    --text: white;
+    --border: white;
 }
