@@ -2,31 +2,27 @@ import { Navbar, Nav, Form, FormControl } from "react-bootstrap";
 import logo from "../../assets/logo_sinFondo.png";
 import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
-function HeaderNavBar({ onFilterChange, setActiveSection }) {
-    const [textoFlitro, setTextoFiltro] = useState("");
-
-    const searchInputRef = useRef(null)
+function HeaderNavBar({ onFilterChange }) {
+    const [textoFiltro, setTextoFiltro] = useState("");
+    const searchInputRef = useRef(null);
 
     const handleInputChange = (e) => {
         const nuevoTexto = e.target.value;
         setTextoFiltro(nuevoTexto);
-        onFilterChange(nuevoTexto);
+        onFilterChange(nuevoTexto); 
     };
 
-    const handleInicioClick = () => {
-        setActiveSection('home');
-    };
-
-    useEffect (()=>{
-        if(searchInputRef.current){
-            searchInputRef.current.focus()
+    useEffect(() => {
+        if (searchInputRef.current) {
+            searchInputRef.current.focus();
         }
-    },[])
+    }, []);
 
     return (
         <>
-            <Navbar.Brand href="#">
+            <Navbar.Brand as={Link} to="/">
                 <img
                     src={logo}
                     width="80"
@@ -35,13 +31,9 @@ function HeaderNavBar({ onFilterChange, setActiveSection }) {
                     alt="Logo"
                 />
             </Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
-                {/* as={Link} */}
-                    <Nav.Link  onClick={handleInicioClick}>
-                        Inicio
-                    </Nav.Link>
                     <Nav.Link href="#categories">
                         Categorías
                     </Nav.Link>
@@ -60,7 +52,8 @@ function HeaderNavBar({ onFilterChange, setActiveSection }) {
                         className="me-2 search-bar"
                         aria-label="Search"
                         onChange={handleInputChange}
-                        value={textoFlitro}
+                        value={textoFiltro}
+                        style={{ minWidth: '40rem' }}
                     />
                 </Form>
             </Navbar.Collapse>
@@ -70,7 +63,6 @@ function HeaderNavBar({ onFilterChange, setActiveSection }) {
 
 HeaderNavBar.propTypes = {
     onFilterChange: PropTypes.func.isRequired,
-    setActiveSection: PropTypes.func.isRequired, // Necesitamos setActiveSection
 };
 
 export default HeaderNavBar;

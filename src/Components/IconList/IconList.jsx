@@ -1,35 +1,83 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Nav } from "react-bootstrap";
+import { Nav, Dropdown } from "react-bootstrap";
 import {
     faShoppingCart,
     faHeart,
     faUser,
     faYinYang,
 } from "@fortawesome/free-solid-svg-icons";
-import PropTypes from "prop-types";
 import "./IconList.css";
 import { useContext } from "react";
-import { ThemeContext } from "../Provider/ThemeProvider";
+import { ThemeContext } from "../../Context/ThemeProvider";
+import useCart from "../../Hooks/UseCart";
+import { Link, useNavigate } from "react-router-dom";
+import useAuth from "../../Hooks/useAuth";
 
-function IconList({ carritoCount, setActiveSection }) {
+function IconList() {
     const { toggleTheme } = useContext(ThemeContext);
+
+    const { cartItems } = useCart();
+
+    const { isLoggedIn, handleLogout, userData } = useAuth();
+
+    const navigate = useNavigate();
+
+    const cartItemsCount = cartItems.length;
+
+    const handleLogoutClick = () => {
+        handleLogout();
+        navigate("/");
+    };
 
     return (
         <>
             <Nav>
-                <Nav.Link onClick={() => setActiveSection('cart')}>
+                <Dropdown>
+                    <Dropdown.Toggle as={Nav.Link} className="custom-toggle">
+                        <FontAwesomeIcon icon={faUser} />
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu className="custom-dropdown-menu thick-border dropdown-menu-end">
+                        {!isLoggedIn && (
+                            <Dropdown.Item as={Link} to="/login">
+                                <button className="custom-button">
+                                    Iniciar Sesión
+                                </button>
+                            </Dropdown.Item>
+                        )}
+                        <Dropdown.Item as={Link} to="">
+                            Perfil
+                        </Dropdown.Item>
+                        <Dropdown.Item as={Link} to="">
+                            Pedidos
+                        </Dropdown.Item>
+                        <Dropdown.Item as={Link} to="">
+                            Devolver artículo
+                        </Dropdown.Item>
+                        {isLoggedIn && (
+                            <>
+                                <Dropdown.Divider />
+                                <Dropdown.Item
+                                    onClick={handleLogoutClick}
+                                    className="logout-item"
+                                >
+                                    <span className="logout-link">
+                                    ¿No eres {userData.name}?{" "} Cerrar sesión
+                                    </span>
+                                </Dropdown.Item>
+                            </>
+                        )}
+                    </Dropdown.Menu>
+                </Dropdown>
+                <Nav.Link as={Link} to="/cart">
                     <div className="cart-icon-container">
                         <FontAwesomeIcon icon={faShoppingCart} />
-                        {carritoCount > 0 && (
-                            <span className="cart-count">{carritoCount}</span>
+                        {cartItemsCount > 0 && (
+                            <span className="cart-count">{cartItemsCount}</span>
                         )}
                     </div>
                 </Nav.Link>
                 <Nav.Link href="#wishlist">
                     <FontAwesomeIcon icon={faHeart} />
-                </Nav.Link>
-                <Nav.Link href="">
-                    <FontAwesomeIcon icon={faUser} />
                 </Nav.Link>
                 <Nav.Link href="" onClick={toggleTheme}>
                     <FontAwesomeIcon icon={faYinYang} />
@@ -38,10 +86,5 @@ function IconList({ carritoCount, setActiveSection }) {
         </>
     );
 }
-
-IconList.propTypes = {
-    carritoCount: PropTypes.number.isRequired,
-    setActiveSection: PropTypes.func.isRequired,
-};
 
 export default IconList;

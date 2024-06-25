@@ -1,24 +1,24 @@
 import data from "../../../data.json";
 import "./ProductSection.css";
 import ProductCard from "../ProductCard/ProductCard";
-import PropTypes from "prop-types";
+import { useContext } from "react";
+import { FilterContext } from "../../Context/SearchContext";
 
-function ProductSection({ filtro, dispatch }) {
+function ProductSection() {
+
+    const {filtro} = useContext(FilterContext)
     const products = data.filter((product) =>
         product.title.toLowerCase().includes(filtro.toLowerCase())
     );
     return (
         <div className="card-grid">
             {products.map((product) => (
-                <ProductCard key={product.id} product={product} dispatch={dispatch} />
+                <ProductCard key={product.id} product={product}/>
             ))}
         </div>
     );
 }
 
-ProductSection.propTypes = {
-    filtro: PropTypes.string.isRequired,
-    dispatch: PropTypes.func.isRequired,
-};
+
 
 export default ProductSection;

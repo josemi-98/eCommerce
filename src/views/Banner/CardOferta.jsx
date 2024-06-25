@@ -1,12 +1,15 @@
+import useAuth from '../../Hooks/useAuth';
 import './CardOferta.css';
-import PropTypes from "prop-types";
 
-const CardOferta = ({ isLoggedIn, name }) => {
+const CardOferta = () => {
+
+  const { isLoggedIn, userData } = useAuth();
+
   return (
     <div className="discount-card">
       {isLoggedIn ? (
         <p className="offer-text">
-          ¡{name}, aprovéchate de tu 20% de descuento!
+          ¡{userData.name}, aprovéchate de tu 20% de descuento!
         </p>
       ) : (
         <p className="offer-text">
@@ -17,9 +20,5 @@ const CardOferta = ({ isLoggedIn, name }) => {
   );
 };
 
-CardOferta.propTypes = {
-  isLoggedIn: PropTypes.bool.isRequired,
-  name: PropTypes.string.isRequired
-}
 
 export default CardOferta;

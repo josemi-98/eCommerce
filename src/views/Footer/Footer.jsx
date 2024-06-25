@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faPhone, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import './Footer.css';
 import { useContext } from 'react';
-import { ThemeContext } from '../Provider/ThemeProvider';
+import { ThemeContext } from '../../Context/ThemeProvider';
 
 const Footer = () => {
     const {theme} = useContext(ThemeContext);
