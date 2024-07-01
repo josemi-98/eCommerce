@@ -1,33 +1,29 @@
-import PropTypes from "prop-types";
 import Header from "./Header/Header";
 import CardOferta from "./Banner/CardOferta";
 import Footer from "./Footer/Footer";
 import { useContext } from "react";
 import { FilterContext } from "../Context/SearchContext";
-import { useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 
-const Layout = ({ children }) => {
+function Layout() {
     const { setFiltro } = useContext(FilterContext);
-    const location = useLocation();
+    // const location = useLocation();
+    //  si usasemos children y el app
+    // const excludePaths = ["/login"]; 
 
-    const excludePaths = ["/login"]; 
-
-    if (excludePaths.includes(location.pathname)) {
-        return <>{children}</>;
-    }
+    // if (excludePaths.includes(location.pathname)) {
+    //     return <>{children}</>;
+    // }
 
     return (
         <>
             <Header onFilterChange={setFiltro} />
             <CardOferta />
-            {children}
+            <Outlet />
             <Footer />
         </>
     );
-};
-
-Layout.propTypes = {
-    children: PropTypes.node.isRequired,
-};
+}
 
 export default Layout;

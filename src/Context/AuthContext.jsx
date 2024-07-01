@@ -1,7 +1,10 @@
 import { createContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
+// import axios from "axios";
 
 export const AuthContext = createContext();
+
+// const API_URL = "http://localhost:3000/users";
 
 export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -10,16 +13,33 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const storedData = localStorage.getItem("userData");
         if (storedData) {
-            setUserData(JSON.parse(storedData));
+            const parsedData = JSON.parse(storedData);
+            setUserData(parsedData);
             setIsLoggedIn(true);
         }
     }, []);
 
+    // useEffect(() => {
+    //     getUsers();
+    // }, []);
+
+    // const getUsers = async () => {
+    //     try {
+    //         const response = await axios.get(API_URL);
+    //         setUserData(response.data);
+    //     } catch (error) {
+    //         console.error("Error fetching users: ", error);
+    //     }
+    // };
+
     const handleLogin = ({ name, email }) => {
         setIsLoggedIn(true);
-        const userDataObje = { name, email };
-        setUserData(userDataObje);
-        localStorage.setItem("userData", JSON.stringify(userDataObje));
+        
+        const rol = (name === "admin" && email === "josemimb98@gmail.com") ? 'admin' : 'user';
+        
+        const userDataObj = { name, email, rol };
+        setUserData(userDataObj);
+        localStorage.setItem("userData", JSON.stringify(userDataObj));
     };
 
     const handleLogout = () => {
@@ -45,3 +65,5 @@ export const AuthProvider = ({ children }) => {
 AuthProvider.propTypes = {
     children: PropTypes.node.isRequired,
 };
+
+export default AuthProvider;

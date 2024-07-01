@@ -1,0 +1,7 @@
+.custom-dropdown > .nav-link::after {
+    display: none !important; /* Oculta la flecha */
+}
+
+.thick-border {
+    border: 6px solid #000000 !important;
+  }

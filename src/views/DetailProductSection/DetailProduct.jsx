@@ -1,14 +1,14 @@
 import { useParams } from "react-router-dom";
 import data from "../../../data.json";
-import { Link } from "react-router-dom";
 import useCart from "../../Hooks/UseCart";
+import BackButton from "../../Components/BackButton/BackButton";
 
 function DetailProduct() {
 
     const {addToCart} = useCart();
 
     const { id } = useParams();
-    const product = data.find((p) => p.id.toString() === id);
+    const product = data.find((product) => product.id.toString() === id);
 
     if (!product) {
         return <div>Producto no encontrado</div>;
@@ -33,7 +33,7 @@ function DetailProduct() {
                     <button className="btn btn-primary" onClick={() => addToCart(product)}>Añadir carrito</button>
                 </div>
             </div>
-            <Link to={"/"} style={{ textDecoration: 'none' }}>Volver </Link>
+            <BackButton/>
         </div>
     );
 }

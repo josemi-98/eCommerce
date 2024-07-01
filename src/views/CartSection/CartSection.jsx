@@ -1,13 +1,10 @@
-// import { useState } from "react";
 import "./CartSection.css";
 import useCart from "../../Hooks/UseCart";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faHeart } from '@fortawesome/free-solid-svg-icons';
-// import { Alert, Button } from "react-bootstrap";
 
 function CartSection() {
-    const { cartItems, clearCart, buyProduct, deleteProduct } = useCart();
-    // const [showAlert, setShowAlert] = useState(false);
+    const { cartItems, clearCart, deleteProduct } = useCart();
 
     const groupedCartIems = cartItems.reduce((acc, item) => {
         if (!acc[item.id]) {
@@ -25,19 +22,17 @@ function CartSection() {
         0
     );
 
-    // const handlePurchase = () => {
-    //     clearCart();
-    //     setShowAlert(true);
-    // };
+    const handleBuy = () =>{
+        alert("Estas siendo redirigido a la pasarela de pago")
+        clearCart()
+    } 
+
+    // const unitPrice = parseFloat(product.price).toFixed(2);
+                    // const totalPrice = (parseFloat(product.price) * product.count).toFixed(2);
 
     return (
         <div className="card-cart">
             <h1>Carrito de compras</h1>
-            {/* {showAlert && (
-                <Alert variant="success" onClose={() => setShowAlert(false)} dismissible>
-                    Compra realizada con éxito
-                </Alert>
-            )} */}
             <div className="card-container-cart">
                 {uniqueCartItems.length > 0 ? (
                     <>
@@ -59,13 +54,13 @@ function CartSection() {
                                     </h3>
                                     <p className="card-price-cart">
                                         Precio por unidad: $
-                                        {product.price.toFixed(2)}
+                                        { product.price}
                                     </p>
                                     <p className="card-price-cart">
                                         Precio total: $
                                         {(
                                             product.price * product.count
-                                        ).toFixed(2)}
+                                        )}
                                     </p>
                                     <button
                                         className="text-muted"
@@ -83,17 +78,17 @@ function CartSection() {
                             </div>
                         ))}
                         <div className="total-cuenta">
-                            Total a Pagar: ${totalPrice.toFixed(2)}
+                            Total a Pagar: ${totalPrice}
                         </div>
                         <button
                             className="btn btn-primary mx-2"
-                            onClick={buyProduct}
+                            onClick={handleBuy}
                         >
                             Comprar
                         </button>
                         <button
                             className="btn btn-danger mx-2"
-                            onClick={clearCart}
+                            onClick={() => clearCart()}
                         >
                             Borrar Compra
                         </button>

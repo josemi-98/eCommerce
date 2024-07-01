@@ -5,12 +5,11 @@ import { fab } from "@fortawesome/free-brands-svg-icons";
 import ProductSection from "./views/ProductSection/ProductSection";
 import CartSection from "./views/CartSection/CartSection";
 import LoginForm from "./views/SectionLogin/LoginForm";
-import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import DetailProduct from "./views/DetailProductSection/DetailProduct";
 import Layout from "./views/Layout";
 import NotFound from "./views/NotFound";
-import ProtectedRoute from "./views/ProtectedRoute";
+import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
 
 library.add(fas, far, fab);
 

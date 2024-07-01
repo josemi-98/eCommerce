@@ -76,7 +76,7 @@ function IconList() {
                         )}
                     </div>
                 </Nav.Link>
-                <Nav.Link href="#wishlist">
+                <Nav.Link as={Link} to="/deseos">
                     <FontAwesomeIcon icon={faHeart} />
                 </Nav.Link>
                 <Nav.Link href="" onClick={toggleTheme}>
