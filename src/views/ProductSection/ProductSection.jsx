@@ -2,16 +2,16 @@ import "./ProductSection.css";
 import ProductCard from "../../Components/ProductCard/ProductCard";
 import ModalProduct from "../../Components/ProductModal/ProductModal";
 import ProductForm from "../../Components/ProductForm/ProductForm";
-import useProduct, { ProductLoader } from "../../Hooks/useProduct";
-import { useEffect, useState } from "react";
+import useProduct from "../../Hooks/useProduct";
 import useAuth from "../../Hooks/useAuth";
+import Loader from "../../Components/Loader/Loader";
 
 function ProductSection() {
 
     const { userData } = useAuth();
 
-    const [loading, setLoading] = useState(true);
-    const [showSpinner, setShowSpinner] = useState(true); 
+    // const [loading, setLoading] = useState(true);
+    // const [showSpinner, setShowSpinner] = useState(true); 
 
     const {
         filteredProducts,
@@ -22,39 +22,36 @@ function ProductSection() {
         openModal,
         setCurrentProduct,
         closeModal,
+        loading,
     } = useProduct();
 
-    useEffect(() => {
-        const loadData = async () => {
-            try {
+    // useEffect(() => {
+    //     const loadData = async () => {
+    //         try {
             
-                setShowSpinner(true);
+    //             setShowSpinner(true);
 
-                const data = await ProductLoader();
+    //             const data = await ProductLoader();
 
-                setCurrentProduct(data);
-                setShowSpinner(false);
-            } catch (error) {
-                console.error('Error loading products:', error);
-                setShowSpinner(false); 
-            } finally {
-                setLoading(false); 
-            }
-        };
+    //             setCurrentProduct(data);
+    //             setShowSpinner(false);
+    //         } catch (error) {
+    //             console.error('Error loading products:', error);
+    //             setShowSpinner(false); 
+    //         } finally {
+    //             setLoading(false); 
+    //         }
+    //     };
 
-        loadData();
-    }, [setCurrentProduct]);
+    //     loadData();
+    // }, [setCurrentProduct]);
 
     const isAdmin = userData && userData.rol === 'admin';           
 
 
-    if (loading && showSpinner) {
+    if (loading) {
         
-        return (
-            <div className="spinner-container">
-                <div className="spinner"></div>
-            </div>
-        );
+        return <Loader/>
     }
 
     return (

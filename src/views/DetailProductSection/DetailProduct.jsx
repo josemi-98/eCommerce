@@ -1,14 +1,32 @@
 import { useParams } from "react-router-dom";
-import data from "../../../data.json";
+// import data from "../../../data.json";
 import useCart from "../../Hooks/UseCart";
 import BackButton from "../../Components/BackButton/BackButton";
+import useProduct from "../../Hooks/useProduct";
+import Loader from "../../Components/Loader/Loader";
+import { useEffect, useState } from "react";
 
 function DetailProduct() {
 
     const {addToCart} = useCart();
+    const  [product, setProduct ] = useState(null)
+
+    const {loading, getProductById} = useProduct()
 
     const { id } = useParams();
-    const product = data.find((product) => product.id.toString() === id);
+    // const product = data.find((product) => product.id.toString() === id);
+
+    useEffect(()=> {
+        const fetchData = async () => {
+            const productData = await getProductById(id)
+            setProduct(productData)
+        };
+        fetchData();
+    }, [id, getProductById])
+
+    if ( loading){
+         <Loader />;
+    }
 
     if (!product) {
         return <div>Producto no encontrado</div>;

@@ -23,6 +23,8 @@ export const ProductsProvider = ({ children }) => {
     const [currentProduct, setCurrentProduct] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
     const [categoriasUnicas, setCategoriasUnicas] = useState([]);
+    const [loading, setLoading] = useState(false)
+
 
     useEffect(() => {
         getProducts();
@@ -57,12 +59,36 @@ export const ProductsProvider = ({ children }) => {
     //* Métodos para hacer el CRUD de productos
     const getProducts = async () => {
         try {
+            setLoading(true)
             const response = await axios.get(API_URL);
             setProducts(response.data);
         } catch (error) {
             console.error("Error fetching products: ", error);
+        } finally {
+            setTimeout(()=> {
+                setLoading(false)
+            }, 2000);
         }
     };
+
+    const getProductById = async (id) => {
+        setLoading(true)
+        try {
+            const response = await axios.get(`${API_URL}/${id}`);
+            const product = response.data;
+            return product;
+        } catch (e) {
+            console.error("Error creating product:", e);
+            //* ASI TENDRIAN QUE MANEJARSE LOS ERRORES
+            // if (e.response && e.response.status === 404 ) {
+            //     setError("erro el producto no existe", e)
+            // } else {
+            //     setError(`error al obetener el producto con ${id}:`, e)
+            // }
+        } finally {
+            setLoading(false)
+        }
+    }
 
     const handleSave = async () => {
         if (editedProduct.id !== null) {
@@ -74,6 +100,7 @@ export const ProductsProvider = ({ children }) => {
 
     const createProduct = async () => {
         try {
+            setLoading(true);
             const newId = uuidv4();
             const newProduct = { ...editedProduct, id: newId };
 
@@ -89,11 +116,14 @@ export const ProductsProvider = ({ children }) => {
             });
         } catch (error) {
             console.error("Error creating product:", error);
+        } finally {
+            setLoading(false);
         }
     };
 
     const editProduct = async () => {
         try {
+            setLoading(true);
             const response = await axios.put(
                 `${API_URL}/${editedProduct.id}`,
                 editedProduct
@@ -108,6 +138,8 @@ export const ProductsProvider = ({ children }) => {
             );
         } catch (error) {
             console.error("Error editing product:", error);
+        } finally {
+            setLoading(false)
         }
     };
 
@@ -133,6 +165,7 @@ export const ProductsProvider = ({ children }) => {
 
     const deleteProduct = async (id) => {
         try {
+            setLoading(true);
             await axios.delete(`${API_URL}/${id}`);
             setProducts((prevProducts) =>
                 prevProducts.filter((product) => product.id !== id)
@@ -140,6 +173,8 @@ export const ProductsProvider = ({ children }) => {
             // getProducts();
         } catch (error) {
             console.error("Error deleting product:", error);
+        } finally {
+            setLoading(false)
         }
     };
 
@@ -151,6 +186,7 @@ export const ProductsProvider = ({ children }) => {
                 currentProduct,
                 modalOpen,
                 editedProduct,
+                loading,
                 setEditedProduct,
                 handleSave,
                 handleEditProductDetails,
@@ -159,6 +195,7 @@ export const ProductsProvider = ({ children }) => {
                 setCurrentProduct,
                 closeModal,
                 handleInputChange,
+                getProductById,
                 categoriasUnicas,
             }}
         >

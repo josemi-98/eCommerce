@@ -9,6 +9,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userData, setUserData] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const storedData = localStorage.getItem("userData");
@@ -17,6 +18,7 @@ export const AuthProvider = ({ children }) => {
             setUserData(parsedData);
             setIsLoggedIn(true);
         }
+        setIsLoading(false);
     }, []);
 
     // useEffect(() => {
@@ -53,6 +55,7 @@ export const AuthProvider = ({ children }) => {
         userData,
         handleLogin,
         handleLogout,
+        isLoading
     };
 
     return (

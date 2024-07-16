@@ -11,21 +11,25 @@ import { RouterProvider } from "react-router-dom";
 import { router } from "./Router/index.jsx";
 import { WishListProvider } from "./Context/WishListContext.jsx";
 import { ProductsProvider } from "./Context/ProductContext.jsx";
+import { Provider } from "react-redux";
+import store from "./Redux/store";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
-        <AuthProvider>
-            <FilterProvider>
-                <ThemeProvider>
-                    <CartProvider>
-                        <WishListProvider>
-                            <ProductsProvider>
-                                <RouterProvider router={router} />
-                            </ProductsProvider>
-                        </WishListProvider>
-                    </CartProvider>
-                </ThemeProvider>
-            </FilterProvider>
-        </AuthProvider>
+        <Provider store={store}>
+            <AuthProvider>
+                <FilterProvider>
+                    <ThemeProvider>
+                        <CartProvider>
+                            <WishListProvider>
+                                <ProductsProvider>
+                                    <RouterProvider router={router} />
+                                </ProductsProvider>
+                            </WishListProvider>
+                        </CartProvider>
+                    </ThemeProvider>
+                </FilterProvider>
+            </AuthProvider>
+        </Provider>
     </React.StrictMode>
 );
