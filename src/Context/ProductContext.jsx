@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
-import { FilterContext } from "./SearchContext";
+import { FilterContext } from "./FilterContext";
 import { v4 as uuidv4 } from "uuid";
 import data from "../../data/db.json";
 
@@ -23,8 +23,7 @@ export const ProductsProvider = ({ children }) => {
     const [currentProduct, setCurrentProduct] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
     const [categoriasUnicas, setCategoriasUnicas] = useState([]);
-    const [loading, setLoading] = useState(false)
-
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         getProducts();
@@ -47,7 +46,7 @@ export const ProductsProvider = ({ children }) => {
     const openModal = () => setModalOpen(true);
     const closeModal = () => {
         setModalOpen(false);
-        setCurrentProduct(null);
+        // setCurrentProduct(null);
     };
 
     //* Función para manejar los cambios en el campo del formulario
@@ -59,20 +58,20 @@ export const ProductsProvider = ({ children }) => {
     //* Métodos para hacer el CRUD de productos
     const getProducts = async () => {
         try {
-            setLoading(true)
+            setLoading(true);
             const response = await axios.get(API_URL);
             setProducts(response.data);
         } catch (error) {
             console.error("Error fetching products: ", error);
         } finally {
-            setTimeout(()=> {
-                setLoading(false)
+            setTimeout(() => {
+                setLoading(false);
             }, 2000);
         }
     };
 
     const getProductById = async (id) => {
-        setLoading(true)
+        setLoading(true);
         try {
             const response = await axios.get(`${API_URL}/${id}`);
             const product = response.data;
@@ -86,9 +85,9 @@ export const ProductsProvider = ({ children }) => {
             //     setError(`error al obetener el producto con ${id}:`, e)
             // }
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
 
     const handleSave = async () => {
         if (editedProduct.id !== null) {
@@ -139,7 +138,7 @@ export const ProductsProvider = ({ children }) => {
         } catch (error) {
             console.error("Error editing product:", error);
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
     };
 
@@ -174,7 +173,7 @@ export const ProductsProvider = ({ children }) => {
         } catch (error) {
             console.error("Error deleting product:", error);
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
     };
 

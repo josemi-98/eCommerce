@@ -1,34 +1,34 @@
 import { useParams } from "react-router-dom";
-// import data from "../../../data.json";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { getProductByIdThunk } from "../../Redux/Thunks/ProductsThunks";
+import { resetSelectedProduct, selectError, selectLoading, selectSelectedProduct } from "../../Redux/Slices/ProductsSlice";
 import useCart from "../../Hooks/UseCart";
 import BackButton from "../../Components/BackButton/BackButton";
-import useProduct from "../../Hooks/useProduct";
 import Loader from "../../Components/Loader/Loader";
-import { useEffect, useState } from "react";
 
 function DetailProduct() {
-
-    const {addToCart} = useCart();
-    const  [product, setProduct ] = useState(null)
-
-    const {loading, getProductById} = useProduct()
-
+    const { addToCart } = useCart();
+    const dispatch = useDispatch();
     const { id } = useParams();
-    // const product = data.find((product) => product.id.toString() === id);
 
-    useEffect(()=> {
-        const fetchData = async () => {
-            const productData = await getProductById(id)
-            setProduct(productData)
-        };
-        fetchData();
-    }, [id, getProductById])
+    const loading = useSelector(selectLoading);
+    const product = useSelector(selectSelectedProduct);
+    const error = useSelector(selectError);
 
-    if ( loading){
-         <Loader />;
+    useEffect(() => {
+        dispatch(getProductByIdThunk(id));
+
+        return () => {
+            dispatch(resetSelectedProduct())
+        }
+    }, [id, dispatch]);
+
+    if (loading) {
+        return <Loader />;
     }
 
-    if (!product) {
+    if (!product && !error) {
         return <div>Producto no encontrado</div>;
     }
 
@@ -48,10 +48,10 @@ function DetailProduct() {
                     <p className="text-primary fw-bold">${product.price}</p>
                     <p>{product.description}</p>
                     <p className="text-muted">Categoría: {product.category}</p>
-                    <button className="btn btn-primary" onClick={() => addToCart(product)}>Añadir carrito</button>
+                    <button className="btn btn-primary" onClick={() => addToCart(product)}>Añadir al carrito</button>
                 </div>
             </div>
-            <BackButton/>
+            <BackButton />
         </div>
     );
 }

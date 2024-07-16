@@ -1,19 +1,39 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import useProduct from "../../Hooks/useProduct";
 
-const ProductForm = ({ initialData, closeModal }) => {
-    const { editedProduct, setEditedProduct, handleInputChange, handleSave } = useProduct();
+
+const ProductForm = ({ initialData, closeModal, onSubmit }) => {
+    const [productData, setProductData] = useState({
+        id: initialData?.id ?? null,
+        title: initialData?.title ?? "",
+        price: initialData?.price ?? 0,
+        description: initialData?.description ?? "",
+        category: initialData?.category ?? "",
+        image: initialData?.image ?? ""
+    });
 
     useEffect(() => {
         if (initialData) {
-            setEditedProduct(initialData);
+            setProductData(initialData);
         }
-    }, [initialData, setEditedProduct]);
+    }, [initialData]);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        const newValue = name === "price" ? parseFloat(value) : value;
+        setProductData((prevData) => ({
+            ...prevData,
+            [name]: newValue
+        }));
+    };
+
+    const handleSave = () => {
+        onSubmit(productData);
+    };
 
     const handleSaveAndClose = () => {
         handleSave();
-        closeModal(); 
+        closeModal();
     };
 
     return (
@@ -24,7 +44,7 @@ const ProductForm = ({ initialData, closeModal }) => {
                     type="text"
                     placeholder="Camiseta"
                     name="title"
-                    value={editedProduct.title}
+                    value={productData.title}
                     onChange={handleInputChange}
                 />
             </Form.Group>
@@ -34,7 +54,7 @@ const ProductForm = ({ initialData, closeModal }) => {
                     type="number"
                     placeholder="10"
                     name="price"
-                    value={editedProduct.price}
+                    value={productData.price}
                     onChange={handleInputChange}
                 />
             </Form.Group>
@@ -44,7 +64,7 @@ const ProductForm = ({ initialData, closeModal }) => {
                     type="text"
                     placeholder="Image Url"
                     name="image"
-                    value={editedProduct.image}
+                    value={productData.image}
                     onChange={handleInputChange}
                 />
             </Form.Group>
@@ -54,7 +74,7 @@ const ProductForm = ({ initialData, closeModal }) => {
                     as="textarea"
                     rows={3}
                     name="description"
-                    value={editedProduct.description}
+                    value={productData.description}
                     onChange={handleInputChange}
                 />
             </Form.Group>
@@ -64,12 +84,14 @@ const ProductForm = ({ initialData, closeModal }) => {
                     type="text"
                     placeholder="Electrónica"
                     name="category"
-                    value={editedProduct.category}
+                    value={productData.category}
                     onChange={handleInputChange}
                 />
             </Form.Group>
             <Modal.Footer>
-                <Button onClick={handleSaveAndClose}>{editedProduct.id !== null ? "Guardar" : "Añadir"}</Button>
+                <Button onClick={handleSaveAndClose}>
+                    {productData.id ? "Guardar" : "Añadir"}
+                </Button>
             </Modal.Footer>
         </Form>
     );

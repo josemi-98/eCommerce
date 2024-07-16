@@ -1,9 +1,13 @@
-import { configureStore } from "@reduxjs/toolkit";
-import rootReducer from "../reducers";
+// primero creamos nuestras funcion con la api, luego los thunks, los slice y por ultimo el store
 
-const store = configureStore ({
-    reducer: rootReducer,
+import { configureStore } from "@reduxjs/toolkit";
+import ProductsSlice from "../Slices/ProductsSlice";
+
+const store = configureStore({
+    reducer: {
+        products: ProductsSlice,
+    },
     devTools: true,
-   })
-   
-   export default store;
+});
+
+export default store;

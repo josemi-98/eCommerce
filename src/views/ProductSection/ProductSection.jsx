@@ -1,79 +1,86 @@
-import "./ProductSection.css";
+import { useContext, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addProductThunk, updateProductThunk, getAllProductsThunk } from "../../Redux/Thunks/ProductsThunks";
 import ProductCard from "../../Components/ProductCard/ProductCard";
 import ModalProduct from "../../Components/ProductModal/ProductModal";
 import ProductForm from "../../Components/ProductForm/ProductForm";
-import useProduct from "../../Hooks/useProduct";
 import useAuth from "../../Hooks/useAuth";
 import Loader from "../../Components/Loader/Loader";
+import { selectProducts, selectLoading, selectError } from "../../Redux/Slices/ProductsSlice";
+import "./ProductSection.css";
+import { FilterContext } from "../../Context/FilterContext";
 
 function ProductSection() {
-
+    const dispatch = useDispatch();
     const { userData } = useAuth();
+    const products = useSelector(selectProducts);
+    const loading = useSelector(selectLoading);
+    const error = useSelector(selectError);
+    const isAdmin = userData && userData.rol === 'admin';    
+    const [modalOpen, setModalOpen] = useState(false);
 
-    // const [loading, setLoading] = useState(true);
-    // const [showSpinner, setShowSpinner] = useState(true); 
+    const { filtro } = useContext(FilterContext);
+    const [filteredProducts, setFilteredProducts] = useState([]);
 
-    const {
-        filteredProducts,
-        currentProduct,
-        modalOpen,
-        handleEditProductDetails,
-        deleteProduct,
-        openModal,
-        setCurrentProduct,
-        closeModal,
-        loading,
-    } = useProduct();
+    // const [categoriasUnicas, setCategoriasUnicas] = useState([]);
 
-    // useEffect(() => {
-    //     const loadData = async () => {
-    //         try {
-            
-    //             setShowSpinner(true);
+    useEffect(() => {
+        setFilteredProducts(
+            products.filter((product) =>
+                product.title.toLowerCase().includes(filtro.toLowerCase())
+            )
+        );
+        //* Recalcular categorías únicas cuando cambian los productos filtrados
+        // const uniqueCategories = [
+        //     ...new Set(products.map((product) => product.category)),
+        // ];
+        // setCategoriasUnicas(uniqueCategories);
+    }, [filtro, products]);
 
-    //             const data = await ProductLoader();
+    const openModal = () => setModalOpen(true);
+    const closeModal = () => {
+        setModalOpen(false);
+    };
 
-    //             setCurrentProduct(data);
-    //             setShowSpinner(false);
-    //         } catch (error) {
-    //             console.error('Error loading products:', error);
-    //             setShowSpinner(false); 
-    //         } finally {
-    //             setLoading(false); 
-    //         }
-    //     };
 
-    //     loadData();
-    // }, [setCurrentProduct]);
+    useEffect(() => {
+        dispatch(getAllProductsThunk());
+    }, [dispatch]);
 
-    const isAdmin = userData && userData.rol === 'admin';           
-
+    const handleSaveProduct = (productData) => {
+        if (productData.id) {
+            dispatch(updateProductThunk({ id: productData.id, editedProduct: productData }));
+        } else {
+            dispatch(addProductThunk(productData));
+        }
+        closeModal();
+    };
 
     if (loading) {
-        
-        return <Loader/>
+        return <Loader />;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
     }
 
     return (
         <>
             {isAdmin && (
-                <button className="button-add-product" onClick={() => {
-                    setCurrentProduct(null);
-                    openModal();
-                }}>Nuevo producto</button>
+                <button className="button-add-product" onClick={() => openModal()}>
+                    Nuevo producto
+                </button>
             )}
             <div className="card-grid">
                 {filteredProducts.map((product) => (
                     <ProductCard
                         key={product.id}
                         product={product}
-                        onEdit={() => handleEditProductDetails(product.id, product.title, product.price, product.image, product.description, product.category)}
-                        onDelete={() => deleteProduct(product.id)}
+                        onEdit={handleSaveProduct}
                     />
                 ))}
-
-                <ModalProduct isOpen={modalOpen} onClose={closeModal} initialData={currentProduct}>
-                    <ProductForm initialData={currentProduct} closeModal={closeModal} />
+                <ModalProduct isOpen={modalOpen} onClose={closeModal}>
+                    <ProductForm closeModal={closeModal} onSubmit={handleSaveProduct} initialData={products} />
                 </ModalProduct>
             </div>
         </>

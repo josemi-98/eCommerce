@@ -1,28 +1,24 @@
-import useCart from "../../Hooks/UseCart";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { deleteProduct } from "../../Api/ProductsApi";
 import { Link } from "react-router-dom";
-import useAuth from "../../Hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faPen, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import ModalAddProduct from "../../Components/ProductModal/ProductModal";
-import { useEffect, useState } from "react";
-import ProductForm from "../ProductForm/ProductForm";
+import useCart from "../../Hooks/UseCart";
+import useAuth from "../../Hooks/useAuth";
 import useWishList from "../../Hooks/UseWishList";
+import ModalAddProduct from "../../Components/ProductModal/ProductModal";
+import ProductForm from "../../Components/ProductForm/ProductForm";
 
-const ProductCard = ({ product, onDelete, onEdit }) => {
-    const { id, title, image, price, rating } = product;
-
+const ProductCard = ({ product, onEdit }) => {
+    
+    const dispatch = useDispatch();
+    const { id, title, image, price } = product;
     const { addToCart } = useCart();
-
     const { wishList, removeFromWishList, addToWishList } = useWishList();
-
     const { isLoggedIn, userData } = useAuth();
-
-    const [modalOpen, setModalOpen] = useState(false);
-
-    const closeModal = () => setModalOpen(false);
-
-    const isAdmin = userData && userData.rol === 'admin'; 
-
+    const [modalOpen, setModalOpen] = useState(false); 
+    const isAdmin = userData && userData.rol === 'admin';
     const [liked, setLiked] = useState(false);
 
     useEffect(() => {
@@ -38,6 +34,10 @@ const ProductCard = ({ product, onDelete, onEdit }) => {
         setLiked(!liked);
     };
 
+    const handleEditClick = () => {
+        setModalOpen(true); 
+    };
+
     return (
         <div className="card" key={id}>
             {isLoggedIn ? (
@@ -46,12 +46,12 @@ const ProductCard = ({ product, onDelete, onEdit }) => {
                         <FontAwesomeIcon
                             icon={faPen}
                             className="card-icon"
-                            onClick={() => onEdit(product)}
+                            onClick={handleEditClick} 
                         />
                         <FontAwesomeIcon
                             icon={faTrashAlt}
                             className="card-icon"
-                            onClick={() => onDelete(product.id)}
+                            onClick={() => dispatch(deleteProduct(id))}
                         />
                     </div>
                 ) : (
@@ -67,15 +67,8 @@ const ProductCard = ({ product, onDelete, onEdit }) => {
             ) : null}
             <Link to={`/product/${id}`} className="card-link">
                 <img src={image} alt={title} className="card-image" />
-
                 <div className="card-content">
                     <h3 className="card-title">{title}</h3>
-                    {/* <p className="card-description">{description}</p> */}
-                    {false && (
-                        <div className="product-rating">
-                            <p>{`Rating: ${rating.rate} (${rating.count} reviews)`}</p>
-                        </div>
-                    )}
                     <p className="card-price">${price}</p>
                 </div>
             </Link>
@@ -84,8 +77,8 @@ const ProductCard = ({ product, onDelete, onEdit }) => {
                     Añadir Carrito
                 </button>
             )}
-            <ModalAddProduct isOpen={modalOpen} onClose={closeModal} initialData={product}>
-                <ProductForm onSubmit={() => onEdit(product)} initialData={product} />
+            <ModalAddProduct isOpen={modalOpen} onClose={() => setModalOpen(false)}>
+                <ProductForm initialData={product} closeModal={() => setModalOpen(false)} onSubmit={onEdit} />
             </ModalAddProduct>
         </div>
     );
