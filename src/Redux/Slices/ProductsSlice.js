@@ -61,7 +61,6 @@ const productsSlice = createSlice({
                     ...action.payload,
                     updatedAt: new Date().toISOString(),
                 }
-                console.log(action);
                 state.products = state.products.map((product) => 
                     product.id === updatedProduct.id ? updatedProduct : product
                 )

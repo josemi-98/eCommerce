@@ -4,18 +4,23 @@ import { Button, Form, Modal } from "react-bootstrap";
 
 const ProductForm = ({ initialData, closeModal, onSubmit }) => {
     const [productData, setProductData] = useState({
-        id: initialData?.id ?? null,
-        title: initialData?.title ?? "",
-        price: initialData?.price ?? 0,
-        description: initialData?.description ?? "",
-        category: initialData?.category ?? "",
-        image: initialData?.image ?? ""
+        id: initialData.id || null,
+        title: initialData.title || "",
+        price: initialData.price || 0,
+        description: initialData.description || "",
+        category: initialData.category || "",
+        image: initialData.image || ""
     });
 
     useEffect(() => {
-        if (initialData) {
-            setProductData(initialData);
-        }
+        setProductData({
+            id: initialData.id || null,
+            title: initialData.title || "",
+            price: initialData.price || 0,
+            description: initialData.description || "",
+            category: initialData.category || "",
+            image: initialData.image || ""
+        });
     }, [initialData]);
 
     const handleInputChange = (e) => {
