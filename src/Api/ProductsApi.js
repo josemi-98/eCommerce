@@ -50,3 +50,4 @@ export const addProduct = async (newProduct) => {
         throw new Error(error.message);
     }
 };
+

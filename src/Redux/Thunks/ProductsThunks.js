@@ -40,6 +40,7 @@ export const deleteProductThunk = createAsyncThunk(
     }
 );
 
+
 export const addProductThunk = createAsyncThunk(
     "products/addProduct",
     async (newProduct) => {

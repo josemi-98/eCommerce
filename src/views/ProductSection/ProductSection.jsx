@@ -42,7 +42,6 @@ function ProductSection() {
         setModalOpen(false);
     };
 
-
     useEffect(() => {
         dispatch(getAllProductsThunk());
     }, [dispatch]);

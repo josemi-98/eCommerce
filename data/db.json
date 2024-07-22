@@ -23,14 +23,10 @@
     {
       "id": "4",
       "title": "Mens",
-      "price": 89,
-      "description": "The color could be slightly different between on the screen and in practice. / Please note that body builds vary by person, therefore, detailed size information should be reviewed below on the product description.",
-      "category": "men's clothing",
+      "price": 22,
       "image": "https://fakestoreapi.com/img/71YXzeOuslL._AC_UY879_.jpg",
-      "rating": {
-        "rate": 2.1,
-        "count": 430
-      }
+      "description": "The color could be slightly different between on the screen and in practice. / Please note that body builds vary by person, therefore, detailed size information should be reviewed below on the product description.",
+      "category": "men's clothing"
     },
     {
       "id": "5",
@@ -199,6 +195,14 @@
         "rate": 3.6,
         "count": 145
       }
+    },
+    {
+      "id": "c85241dd-3839-4539-a38d-e7cf944649aa",
+      "title": "adaff",
+      "price": 23,
+      "image": "www.ejempl",
+      "description": "afaf",
+      "category": "sfasf"
     }
   ],
   "users": [

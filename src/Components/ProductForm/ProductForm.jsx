@@ -1,101 +1,134 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-
+import { useForm } from "react-hook-form";
 
 const ProductForm = ({ initialData, closeModal, onSubmit }) => {
-    const [productData, setProductData] = useState({
-        id: initialData.id || null,
-        title: initialData.title || "",
-        price: initialData.price || 0,
-        description: initialData.description || "",
-        category: initialData.category || "",
-        image: initialData.image || ""
-    });
+    const { register, handleSubmit, reset, setError, watch, formState: { errors }, setValue } = useForm();
 
     useEffect(() => {
-        setProductData({
-            id: initialData.id || null,
-            title: initialData.title || "",
-            price: initialData.price || 0,
-            description: initialData.description || "",
-            category: initialData.category || "",
-            image: initialData.image || ""
-        });
-    }, [initialData]);
+        if (initialData) {
+            setValue("title", initialData.title || "");
+            setValue("price", initialData.price || 0);
+            setValue("description", initialData.description || "");
+            setValue("category", initialData.category || "");
+            setValue("image", initialData.image || "");
+        }
+    }, [initialData, setValue]);
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        const newValue = name === "price" ? parseFloat(value) : value;
-        setProductData((prevData) => ({
-            ...prevData,
-            [name]: newValue
-        }));
-    };
-
-    const handleSave = () => {
+    const handleSave = (data) => {
+        const productData = {
+            id: initialData.id || null, 
+            ...data
+        };
         onSubmit(productData);
+        closeModal();
+        reset(); 
     };
 
-    const handleSaveAndClose = () => {
-        handleSave();
-        closeModal();
+    const handleImageValidation = () => {
+        const image = watch("image");
+
+        if (!image.match(/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/i)) {
+            setError("image", {
+                message: "Ingrese una URL válida (https://www.ejemplo.com). "
+            });
+        } else {
+            setError("image", {
+                message: ""
+            });
+        }
     };
 
     return (
-        <Form>
+        <Form onSubmit={handleSubmit(handleSave)}>
             <Form.Group className="mb-3">
                 <Form.Label>Nombre del producto</Form.Label>
                 <Form.Control
                     type="text"
                     placeholder="Camiseta"
-                    name="title"
-                    value={productData.title}
-                    onChange={handleInputChange}
+                    {...register("title", {
+                        required: "Por favor, ingrese un nombre para el producto.",
+                        minLength: {
+                            value: 4,
+                            message: "El nombre debe tener al menos 4 caracteres."
+                        },
+                        maxLength: {
+                            value: 40,
+                            message: "El nombre no debe exceder los 40 caracteres."
+                        }
+                    })}
                 />
+                {errors.title && <Form.Text className="m-2 error-text">{errors.title.message}</Form.Text>}
             </Form.Group>
             <Form.Group className="mb-3">
                 <Form.Label>Precio del producto</Form.Label>
                 <Form.Control
                     type="number"
                     placeholder="10"
-                    name="price"
-                    value={productData.price}
-                    onChange={handleInputChange}
+                    {...register("price", {
+                        required: "Por favor, ingrese el precio del producto.",
+                        valueAsNumber: true,
+                        min: {
+                            value: 0.01,
+                            message: "El precio debe ser mayor que 0."
+                        }
+                    })}
                 />
+                {errors.price && <Form.Text className="m-2 error-text">{errors.price.message}</Form.Text>}
             </Form.Group>
             <Form.Group className="mb-3">
                 <Form.Label>Imagen del producto</Form.Label>
                 <Form.Control
                     type="text"
                     placeholder="Image Url"
-                    name="image"
-                    value={productData.image}
-                    onChange={handleInputChange}
+                    {...register("image", {
+                        required: "Por favor, ingrese la URL de la imagen del producto.",
+                    })}
+                    onBlur={handleImageValidation}
                 />
+                {errors.image && <Form.Text className="m-2 error-text">{errors.image.message}</Form.Text>}
             </Form.Group>
             <Form.Group className="mb-3">
                 <Form.Label>Descripción</Form.Label>
                 <Form.Control
                     as="textarea"
                     rows={3}
-                    name="description"
-                    value={productData.description}
-                    onChange={handleInputChange}
+                    {...register("description", {
+                        required: "Por favor, ingrese una descripción para el producto.",
+                        minLength: {
+                            value: 4,
+                            message: "La descripción debe tener al menos 4 caracteres."
+                        },
+                        maxLength: {
+                            value: 500,
+                            message: "La descripción no debe exceder los 500 caracteres."
+                        }
+                    })}
                 />
+                {errors.description && <Form.Text className="m-2 error-text">{errors.description.message}</Form.Text>}
             </Form.Group>
             <Form.Group className="mb-3">
                 <Form.Label>Categoría</Form.Label>
                 <Form.Control
                     type="text"
                     placeholder="Electrónica"
-                    name="category"
-                    value={productData.category}
-                    onChange={handleInputChange}
+                    {...register("category", {
+                        required: "Por favor, ingrese una categoría para el producto.",
+                        minLength: {
+                            value: 4,
+                            message: "La categoría debe tener al menos 4 caracteres."
+                        },
+                        maxLength: {
+                            value: 20,
+                            message: "La categoría no debe exceder los 20 caracteres."
+                        }
+                    })}
                 />
+                {errors.category && <Form.Text className="m-2 error-text">{errors.category.message}</Form.Text>}
             </Form.Group>
             <Modal.Footer>
-                <Button onClick={handleSaveAndClose}>
-                    {productData.id ? "Guardar" : "Añadir"}
+                <Button type="submit">
+                    {initialData.id ? "Guardar" : "Añadir"}
                 </Button>
             </Modal.Footer>
         </Form>

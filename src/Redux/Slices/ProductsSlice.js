@@ -12,6 +12,7 @@ const pendingMatcher = (action) => {
     action.type.endsWith("/pending");
 };
 
+
 const productsSlice = createSlice({
     name: "products",
     initialState,
