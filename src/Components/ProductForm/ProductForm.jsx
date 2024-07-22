@@ -3,7 +3,16 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 
 const ProductForm = ({ initialData, closeModal, onSubmit }) => {
-    const { register, handleSubmit, reset, setError, watch, formState: { errors }, setValue } = useForm();
+    const {
+        register,
+        handleSubmit,
+        reset,
+        setError,
+        watch,
+        formState: { errors },
+        setValue,
+        
+    } = useForm();
 
     useEffect(() => {
         if (initialData) {
@@ -15,28 +24,41 @@ const ProductForm = ({ initialData, closeModal, onSubmit }) => {
         }
     }, [initialData, setValue]);
 
+    const handleImageValidation = () => {
+        const image = watch("image");
+        const isValid = image.match(/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/i);
+
+        if (!isValid) {
+            setError("image", {
+                type: "manual",
+                message: "Ingrese una URL válida (https://www.ejemplo.com).",
+            });
+            return false;
+        } else {
+            setError("image", {
+                type: "manual",
+                message: "",
+            });
+            return true;
+        }
+    };
+
+    // Maneja el guardado del formulario
     const handleSave = (data) => {
+        
+        const isImageValid = handleImageValidation();
+
+        if (!isImageValid) {
+            return; 
+        }
+
         const productData = {
-            id: initialData.id || null, 
-            ...data
+            id: initialData.id || null,
+            ...data,
         };
         onSubmit(productData);
         closeModal();
-        reset(); 
-    };
-
-    const handleImageValidation = () => {
-        const image = watch("image");
-
-        if (!image.match(/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/i)) {
-            setError("image", {
-                message: "Ingrese una URL válida (https://www.ejemplo.com). "
-            });
-        } else {
-            setError("image", {
-                message: ""
-            });
-        }
+        reset();
     };
 
     return (
@@ -47,18 +69,25 @@ const ProductForm = ({ initialData, closeModal, onSubmit }) => {
                     type="text"
                     placeholder="Camiseta"
                     {...register("title", {
-                        required: "Por favor, ingrese un nombre para el producto.",
+                        required:
+                            "Por favor, ingrese un nombre para el producto.",
                         minLength: {
                             value: 4,
-                            message: "El nombre debe tener al menos 4 caracteres."
+                            message:
+                                "El nombre debe tener al menos 4 caracteres.",
                         },
                         maxLength: {
                             value: 40,
-                            message: "El nombre no debe exceder los 40 caracteres."
-                        }
+                            message:
+                                "El nombre no debe exceder los 40 caracteres.",
+                        },
                     })}
                 />
-                {errors.title && <Form.Text className="m-2 error-text">{errors.title.message}</Form.Text>}
+                {errors.title && (
+                    <Form.Text className="m-2 error-text">
+                        {errors.title.message}
+                    </Form.Text>
+                )}
             </Form.Group>
             <Form.Group className="mb-3">
                 <Form.Label>Precio del producto</Form.Label>
@@ -70,11 +99,15 @@ const ProductForm = ({ initialData, closeModal, onSubmit }) => {
                         valueAsNumber: true,
                         min: {
                             value: 0.01,
-                            message: "El precio debe ser mayor que 0."
-                        }
+                            message: "El precio debe ser mayor que 0.",
+                        },
                     })}
                 />
-                {errors.price && <Form.Text className="m-2 error-text">{errors.price.message}</Form.Text>}
+                {errors.price && (
+                    <Form.Text className="m-2 error-text">
+                        {errors.price.message}
+                    </Form.Text>
+                )}
             </Form.Group>
             <Form.Group className="mb-3">
                 <Form.Label>Imagen del producto</Form.Label>
@@ -82,11 +115,16 @@ const ProductForm = ({ initialData, closeModal, onSubmit }) => {
                     type="text"
                     placeholder="Image Url"
                     {...register("image", {
-                        required: "Por favor, ingrese la URL de la imagen del producto.",
+                        required:
+                            "Por favor, ingrese la URL de la imagen del producto.",
                     })}
                     onBlur={handleImageValidation}
                 />
-                {errors.image && <Form.Text className="m-2 error-text">{errors.image.message}</Form.Text>}
+                {errors.image && (
+                    <Form.Text className="m-2 error-text">
+                        {errors.image.message}
+                    </Form.Text>
+                )}
             </Form.Group>
             <Form.Group className="mb-3">
                 <Form.Label>Descripción</Form.Label>
@@ -94,18 +132,25 @@ const ProductForm = ({ initialData, closeModal, onSubmit }) => {
                     as="textarea"
                     rows={3}
                     {...register("description", {
-                        required: "Por favor, ingrese una descripción para el producto.",
+                        required:
+                            "Por favor, ingrese una descripción para el producto.",
                         minLength: {
                             value: 4,
-                            message: "La descripción debe tener al menos 4 caracteres."
+                            message:
+                                "La descripción debe tener al menos 4 caracteres.",
                         },
                         maxLength: {
                             value: 500,
-                            message: "La descripción no debe exceder los 500 caracteres."
-                        }
+                            message:
+                                "La descripción no debe exceder los 500 caracteres.",
+                        },
                     })}
                 />
-                {errors.description && <Form.Text className="m-2 error-text">{errors.description.message}</Form.Text>}
+                {errors.description && (
+                    <Form.Text className="m-2 error-text">
+                        {errors.description.message}
+                    </Form.Text>
+                )}
             </Form.Group>
             <Form.Group className="mb-3">
                 <Form.Label>Categoría</Form.Label>
@@ -113,18 +158,25 @@ const ProductForm = ({ initialData, closeModal, onSubmit }) => {
                     type="text"
                     placeholder="Electrónica"
                     {...register("category", {
-                        required: "Por favor, ingrese una categoría para el producto.",
+                        required:
+                            "Por favor, ingrese una categoría para el producto.",
                         minLength: {
                             value: 4,
-                            message: "La categoría debe tener al menos 4 caracteres."
+                            message:
+                                "La categoría debe tener al menos 4 caracteres.",
                         },
                         maxLength: {
                             value: 20,
-                            message: "La categoría no debe exceder los 20 caracteres."
-                        }
+                            message:
+                                "La categoría no debe exceder los 20 caracteres.",
+                        },
                     })}
                 />
-                {errors.category && <Form.Text className="m-2 error-text">{errors.category.message}</Form.Text>}
+                {errors.category && (
+                    <Form.Text className="m-2 error-text">
+                        {errors.category.message}
+                    </Form.Text>
+                )}
             </Form.Group>
             <Modal.Footer>
                 <Button type="submit">

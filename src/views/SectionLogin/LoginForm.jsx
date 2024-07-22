@@ -11,8 +11,29 @@ const LoginForm = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
+    const handleEmailValidation = () => {
+        const email = watch("email");
+        const isValid = email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i)
+
+        if (!isValid) {
+            setError("email", {
+                type: "manual",
+                message: "Ingrese una dirección de correo electrónico válido."
+            });
+            return false;
+
+        } else {
+            setError("email", {
+                type: "manual",
+                message: ""
+            })
+            return true;
+        }
+    };
     const onSubmit = (data) => {
         const { nombre, email, password, confirmPassword } = data;
+
+        const isEmailValid = handleEmailValidation();
 
         if (password !== confirmPassword) {
             setError("confirmPassword", {
@@ -21,7 +42,7 @@ const LoginForm = () => {
             return;
         }
 
-        if (!handleEmailValidation()){
+        if (!isEmailValid){
             return;
         }
 
@@ -33,19 +54,6 @@ const LoginForm = () => {
         console.log(data);
     };
 
-    const handleEmailValidation = () => {
-        const email = watch("email");
-
-        if (!email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i)) {
-            setError("email", {
-                message: "Ingrese una dirección de correo electrónico válido."
-            });
-        } else {
-            setError("email", {
-                message: ""
-            })
-        }
-    };
 
     return (
         <Container className="mt-5">
