@@ -28,6 +28,7 @@ function DetailProduct() {
         return <Loader />;
     }
 
+    
     if (!product && !error) {
         return <div>Producto no encontrado</div>;
     }

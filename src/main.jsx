@@ -12,7 +12,7 @@ import { router } from "./Router/index.jsx";
 import { WishListProvider } from "./Context/WishListContext.jsx";
 import { ProductsProvider } from "./Context/ProductContext.jsx";
 import { Provider } from "react-redux";
-import store from "./Redux/Store/index.js";
+import store from "./Redux/store/index.js";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
