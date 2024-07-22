@@ -21,6 +21,10 @@ const LoginForm = () => {
             return;
         }
 
+        if (!handleEmailValidation()){
+            return;
+        }
+
         if (nombre && email) {
             handleLogin({ name: nombre, email, password, confirmPassword });
             const destination = location.state?.pathname || "/";
