@@ -14,6 +14,8 @@ Currently, two official plugins are available:
 
 Es una aplicación de ecommerce desarrollada con React, diseñada para ofrecer una experiencia de compra en línea fluida y eficiente para productos todo tipo de productos. Inspirada en las mejores prácticas de usabilidad y diseño, proporciona todas las funcionalidades esenciales de un ecommerce convencional, pero con la agilidad y la interactividad que ofrece React.
 
+**No olvides que solo hay un rol admin con los credenciales nombre:josemi email: josemimb98@gmail.com para poder modificar los productos.**
+
 ## Comandos para lanzar la aplicación
 - npm i
 - Dentro de la carpeta /data json-server --watch db.json
